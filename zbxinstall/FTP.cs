@@ -45,19 +45,33 @@ namespace zbxinstall
             response.Close();
             return _check;
         }
-        protected static void _getListFolber()
+        internal static void GetListFolber()
         {
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(_URI(null));
-            request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
-            request.Credentials = new NetworkCredential(FTPs.Login, FTPs.Password);
-            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-            using (Stream listStream = response.GetResponseStream())
-            using (StreamReader listReader = new StreamReader(listStream))
+            if (_checkFTP() == true)
             {
-                while (!listReader.EndOfStream)
+                try
                 {
-                    FTPs.FileList.Add(listReader.ReadLine());
+                    FtpWebRequest request = (FtpWebRequest)WebRequest.Create(_URI(null));
+                    request.Method = WebRequestMethods.Ftp.ListDirectoryDetails;
+                    request.Credentials = new NetworkCredential(FTPs.Login, FTPs.Password);
+                    using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+                    using (Stream listStream = response.GetResponseStream())
+                    using (StreamReader listReader = new StreamReader(listStream))
+                    {
+                        while (!listReader.EndOfStream)
+                        {
+                            FTPs.FileList.Add(listReader.ReadLine());
+                        }
+                    }
                 }
+                catch (Exception ex)
+                {
+                    Logs.Log += $"{DateTime.Now} {ex}\n";
+                }
+            }
+            else
+            {
+                Logs.Log += $"{DateTime.Now} Не удалось получить список файлов с ftp.\n";
             }
         }
         protected static bool _download(string File)
@@ -71,14 +85,19 @@ namespace zbxinstall
                 FtpWebResponse response = (FtpWebResponse)request.GetResponse();
                 Stream responseStream = response.GetResponseStream();
                 FileStream fs = new FileStream(File, FileMode.Create);
+                FileStream dfs = new FileStream(IOs.RootDir + IOs.ZbxTempPAth + @"\" + File, FileMode.Create);
                 byte[] buffer = new byte[64];
                 int size = 0;
                 while ((size = responseStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    fs.Write(buffer, 0, size);
+                    //fs.Write(buffer, 0, size);
+                    fs.CopyTo(dfs);
+                    dfs.Write(buffer, 0, size);
                 }
                 fs.Close();
+                dfs.Close();
                 response.Close();
+                IO.DelFile(IOs.CurrDir + @"\" + File);
                 return true;
             }
             catch (Exception ex)
@@ -96,7 +115,7 @@ namespace zbxinstall
                 {
                     string[] tokens = file.Split(new[] { ' ' }, 9, StringSplitOptions.RemoveEmptyEntries);
                     string filename = tokens[8];
-                    string filepath = IOs.RootDir + IOs.ZbxTempPAth + filename;
+                    string filepath = IOs.RootDir + IOs.ZbxTempPAth + @"\" + filename;
                     if (IO.CheckFileExists(filepath) == true)
                     {
                         if (IO.DelFile(filepath) == true)
@@ -148,8 +167,8 @@ namespace zbxinstall
     struct FTPs
     {
         internal static string Head { get; } = "ftp://";
-        internal static string Server { get; } = "37.44.44.180";
-        internal static string Port { get; } = "22526";
+        internal static string Server { get; } = "1eskaftp.hldns.ru";
+        internal static string Port { get; } = ":22526";
         internal static string Login { get; } = "test1eska";
         internal static string Password { get; } = "thvLaQ8dIv8zTPKdc7wf63hu5nLRVBAmov3Qx1lpKGbaW";
         internal static string Folder { get; } = "/test/zabbix/";

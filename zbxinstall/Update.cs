@@ -11,20 +11,19 @@ namespace zbxinstall
         {
             if (Versions.Zabbix_agent > VersionsLocal.Zabbix_agent)
             {
-                FTPs.FileList.Add(IOs.Zabbix_agent);
+                FTPs.FileList.Add($"-rw - r--r--    1 1015     1015                   166 Aug {IOs.Zabbix_agent}");
             }
-            FTPs.FileList.Add(IOs.Zabbix_agent);
             if (Versions.Config > VersionsLocal.Config)
             {
-                FTPs.FileList.Add(IOs.Config);
+                FTPs.FileList.Add($"-rw - r--r--    1 1015     1015                   166 Aug {IOs.Config}");
             }
             if (Versions.Userparams > VersionsLocal.Userparams)
             {
-                FTPs.FileList.Add(IOs.Userparams);
+                FTPs.FileList.Add($"-rw - r--r--    1 1015     1015                   166 Aug {IOs.Userparams}");
             }
             if (Versions.Zabbixscr > VersionsLocal.Zabbixscr)
             {
-                FTPs.FileList.Add(IOs.Zabbixscr);
+                FTPs.FileList.Add($"-rw - r--r--    1 1015     1015                   166 Aug {IOs.Zabbixscr}");
             }
         }
         internal static bool Get()

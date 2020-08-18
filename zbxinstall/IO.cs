@@ -48,7 +48,7 @@ namespace zbxinstall
                 return false;
             }
         }
-        protected static bool DelDir(string dir)
+        internal static bool DelDir(string dir)
         {
             try
             {
@@ -131,15 +131,35 @@ namespace zbxinstall
                 return false;
             }
         }
+        internal static bool GetFileInDir(string Dir)
+        {
+            try
+            {
+                DirectoryInfo directoryInfo = new DirectoryInfo(Dir);
+                foreach (var file in directoryInfo.GetFiles())
+                {
+                    IOs.TempFiles.Add(file.FullName);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logs.Log += $"{DateTime.Now} Исключение при получении списка файлов\n {ex}\n";
+                return false;
+            }
+        }
     }
     struct IOs
     {
         internal static string RootDir { get; } = Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System));
+        internal static string CurrDir { get; } = Environment.CurrentDirectory;
         internal static string ZbxTempPAth { get; } = "Zbxtemp";
         internal static string ZabbixAgent { get; } = "Zabbix agent";
         internal static string Zabbix_agent { get; set; } = "zabbix_agentd.exe";
         internal static string Zabbixscr { get; set; } = "zabbixscr.exe";
         internal static string Userparams { get; set; } = "zabbix_agentd.userparams.conf";
         internal static string Config { get; set; } = "zabbix_agentd.conf";
+        internal static List<string> TempFiles = new List<string>();
+        internal static string LogPath { get; } = "logupdate.log";
     }
 }

@@ -10,7 +10,8 @@ namespace zbxinstall
         internal static bool GetVersion()
         {
             FTPs.FileList.Clear();
-            FTPs.FileList.Add(FTPs.Version);
+            FTPs.FileList.Add($"-rw - r--r--    1 1015     1015                   166 Aug {FTPs.Version}");
+            
             if (FTP.Download() == true)
             {
                 if (XML.Open(IOs.RootDir + IOs.ZbxTempPAth + @"\" + FTPs.Version, false) == true)
