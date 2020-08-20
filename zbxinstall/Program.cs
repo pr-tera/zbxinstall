@@ -37,7 +37,7 @@ namespace zbxinstall
                                     if (Service.Start() == true)
                                     {                                       
                                         Logs.Log += $"\n{DateTime.Now} Обновление прошло успешно!.\n";
-                                        if (IO.DelDir(IOs.ZbxTempPAth) == true)
+                                        if (IO.DelDir(IOs.RootDir + IOs.ZbxTempPAth) == true)
                                         {
                                             Logs.Log += $"\n{DateTime.Now} Удаление каталога временных файлов прощло успешно.\n";
                                             IO.DelDir(IOs.RootDir + IOs.ZbxTempPAth);
@@ -73,28 +73,28 @@ namespace zbxinstall
                         }
                         else
                         {
-                            Logs.Log += $"\n{DateTime.Now} Обновление прошло с ошибками.\n";
+                            Logs.Log += $"\n{DateTime.Now} Обновление не требуется.\n";
                             IO.DelDir(IOs.RootDir + IOs.ZbxTempPAth);
                             Log.WriteAsync();
                         }
                     }
                     else
                     {
-                        Logs.Log += $"\n{DateTime.Now} Проверка обновления прошла с ошибками.\n";
+                        Logs.Log += $"\n{DateTime.Now} Ошибка чтения файла версии.\n";
                         IO.DelDir(IOs.RootDir + IOs.ZbxTempPAth);
                         Log.WriteAsync();
                     }
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(IO.CreatFolder(IOs.ZbxTempPAth)))
+                    if (!string.IsNullOrEmpty(IO.CreatFolder(IOs.RootDir + IOs.ZbxTempPAth)))
                     {
                         Start();
                     }
                     else
                     {
                         Logs.Log += $"\n{DateTime.Now} Не удалось создать каталог для временных файлов.\n";
-                        IO.DelDir(IOs.RootDir + IOs.ZbxTempPAth);
+                        //IO.DelDir(IOs.RootDir + IOs.ZbxTempPAth);
                         Log.WriteAsync();
                     }
                 }

@@ -7,7 +7,7 @@ namespace zbxinstall
     {
         internal static bool Stop()
         {
-            bool _check;
+            bool _check = false;
             TimeSpan timeSpan = TimeSpan.FromMinutes(1);
             ServiceController service = new ServiceController("Zabbix Agent");
             if (service.Status != ServiceControllerStatus.Stopped)
@@ -15,12 +15,12 @@ namespace zbxinstall
                 try
                 {
                     service.Stop();
+                    service.WaitForStatus(ServiceControllerStatus.Stopped, timeSpan);
                 }
                 catch (Exception ex)
                 {
                     Logs.Log += $"\n{ex}\n";
                 }
-                service.WaitForStatus(ServiceControllerStatus.Stopped, timeSpan);
             }
             if (service.Status == ServiceControllerStatus.Stopped)
             {
@@ -42,12 +42,12 @@ namespace zbxinstall
                 try
                 {
                     service.Start();
+                    service.WaitForStatus(ServiceControllerStatus.Running, timeSpan);
                 }
                 catch (Exception ex)
                 {
                     Logs.Log += $"\n{ex}\n";
                 }
-                service.WaitForStatus(ServiceControllerStatus.Stopped, timeSpan);
             }
             if (service.Status == ServiceControllerStatus.Running)
             {
