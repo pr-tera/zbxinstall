@@ -22,8 +22,8 @@ namespace zbxinstall
                     }
                     else
                     {
-                        Logs.Log += $"{DateTime.Now} Проверка версии не удалась, не удалось открыть файл версии.\n";
-                        return false;
+                        Logs.Log += $"{DateTime.Now} Локальный файл версии не существует!\n";
+                        return true;
                     }
                 }
                 else

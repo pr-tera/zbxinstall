@@ -8,6 +8,7 @@ namespace zbxinstall
         static void Main(string[] args)
         {
             Start();
+            ZabbixAPI.Createhost();
         }
         private static void Start()
         {
