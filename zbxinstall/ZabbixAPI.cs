@@ -59,7 +59,7 @@ namespace zbxinstall
                     request.Method = Http_s.Method[0];
                     Host_parametrs_templates_json host_Parametrs_Templates_Json = new Host_parametrs_templates_json { templateid = "10352" };
                     Host_parametrs_group_json host_Parametrs_Group_Json = new Host_parametrs_group_json { groupid = "20" };
-                    Host_parametrs_interface_json host_Parametrs_Interface_Json = new Host_parametrs_interface_json { type = "1", main = "1", useip = "0", ip = Info.IP(), dns = Info.DNSName(), port = "10051" };
+                    Host_parametrs_interface_json host_Parametrs_Interface_Json = new Host_parametrs_interface_json { type = "1", main = "1", useip = "0", ip = Info.IP(), dns = Info.DNSName() + ".1eska.local", port = "10051" };
                     Host_parametrs_json host_Parametrs_Json = new Host_parametrs_json { host = Info.DNSName(), interfaces = host_Parametrs_Interface_Json, groups = host_Parametrs_Group_Json, templates = host_Parametrs_Templates_Json, inventory_mode = "0", proxy_hostid = "10417" };
                     Host_json host_Json = new Host_json { jsonrpc = "2.0", method = "host.create", @params = host_Parametrs_Json, auth = Json.Disassemble(HttpF.Ayth()), id = "1" };
                     using (var streamWriter = new StreamWriter(request.GetRequestStream()))
